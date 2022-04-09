@@ -48,7 +48,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
-      JMX_PORT: 39999
+      # JMX_PORT: 39999
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
     volumes:
     - ./jmx-exporter:/usr/share/jmx_exporter/
@@ -69,7 +69,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
-      JMX_PORT: 39999
     volumes:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
@@ -90,31 +89,13 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_LOG4J_ROOT_LOGLEVEL: debug
-      JMX_PORT: 39999
     volumes:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
-  prometheus:
+  kafka-monitoring:
+    image: provectuslabs/kafka-ui:latest
     ports:
-      - 9090:9090/tcp
-    image: prom/prometheus:0.18.0
-    volumes:
-      - ./prometheus:/etc/prometheus
-
-  grafana:
-    image: grafana/grafana:3.0.1
-    ports:
-      - 3000:3000/tcp
-    links:
-      - prometheus
-    volumes:
-      - "graf-db:/var/lib/grafana"
-
-  graf-db:
-    command:
-      - cat
-    image: infinityworks/graf-db:08
-    links:
-      - prometheus
-    volumes:
-      - "graf-db:/var/lib/grafana/"
+      - 9999:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-docker
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
