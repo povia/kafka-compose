@@ -23,5 +23,6 @@ public class KafkaScheduler {
 
     TimeRequest timeRequest = new TimeRequest(timestamp, producer);
     eventPusher.send("private", timeRequest);
+    eventPusher.send("privatetest", timeRequest);
   }
 }

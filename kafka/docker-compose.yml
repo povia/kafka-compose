@@ -35,6 +35,7 @@ services:
 
   kafka-1:
     image: confluentinc/cp-kafka:latest
+    restart: on-failure
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -55,6 +56,7 @@ services:
 
   kafka-2:
     image: confluentinc/cp-kafka:latest
+    restart: on-failure
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -74,6 +76,7 @@ services:
 
   kafka-3:
     image: confluentinc/cp-kafka:latest
+    restart: on-failure
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -99,3 +102,31 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local-docker
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+
+  kafka-schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: kafka-schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-1:9092
+      SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  schema-registry-ui:
+    image: landoop/schema-registry-ui:0.9.4
+    hostname: kafka-schema-registry-ui
+    ports:
+      - "8001:8000"
+    environment:
+      SCHEMAREGISTRY_URL: http://kafka-schema-registry:8081/
+      PROXY: "true"
+    depends_on:
+      - kafka-schema-registry
