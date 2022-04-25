@@ -1,0 +1,11 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092,localhost:39092,localhost:49092
+
+service:
+  kafka:
+    enable: true
+
+server:
+  port: 5047
