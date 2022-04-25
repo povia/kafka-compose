@@ -113,6 +113,7 @@ services:
   kafka-schema-registry:
     image: confluentinc/cp-schema-registry:latest
     hostname: kafka-schema-registry
+    platform: linux/amd64
     ports:
       - "8081:8081"
     environment:
@@ -130,6 +131,7 @@ services:
   schema-registry-ui:
     image: landoop/schema-registry-ui:0.9.4
     hostname: kafka-schema-registry-ui
+    platform: linux/amd64
     ports:
       - "8001:8000"
     environment:
