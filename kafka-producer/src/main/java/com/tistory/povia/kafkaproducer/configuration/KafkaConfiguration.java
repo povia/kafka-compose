@@ -1,6 +1,5 @@
 package com.tistory.povia.kafkaproducer.configuration;
 
-import com.tistory.povia.kafkaproducer.push.EventPusher;
 import com.tistory.povia.kafkaproducer.push.request.KafkaRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

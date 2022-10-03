@@ -1,6 +1,6 @@
 package com.tistory.povia.kafkaproducer.scheduler;
 
-import com.tistory.povia.kafkaproducer.push.EventPusher;
+import com.tistory.povia.kafkaproducer.push.KafkaEventPusher;
 import com.tistory.povia.kafkaproducer.push.request.TimeRequest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class KafkaScheduler {
 
-  private final EventPusher eventPusher;
+  private final KafkaEventPusher kafkaEventPusher;
 
-  public KafkaScheduler(EventPusher eventPusher) {
-    this.eventPusher = eventPusher;
+  public KafkaScheduler(KafkaEventPusher kafkaEventPusher) {
+    this.kafkaEventPusher = kafkaEventPusher;
   }
 
   @Scheduled(fixedDelay = 1000)
@@ -22,7 +22,7 @@ public class KafkaScheduler {
     String producer = "test";
 
     TimeRequest timeRequest = new TimeRequest(timestamp, producer);
-    eventPusher.send("private", timeRequest);
-    eventPusher.send("privatetest", timeRequest);
+    kafkaEventPusher.send("private", timeRequest);
+    kafkaEventPusher.send("privatetest", timeRequest);
   }
 }

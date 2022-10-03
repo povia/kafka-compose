@@ -13,4 +13,11 @@ public class TimeRequest implements KafkaRequest {
     this.timestamp = timestamp;
     this.producer = producer;
   }
+
+  @Override
+  public String toString() {
+    return "{" +
+      "timestamp=" + timestamp +
+      ", producer='" + producer + '}';
+  }
 }
